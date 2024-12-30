@@ -6,7 +6,7 @@ Data Engineering pipeline designed to ingest data into a data warehouse using AW
 
 ## Tech Stack 
 - AWS S3
-- S3 Cloudtrail Notification 
+- Cloudtrail Notification 
 - Event Bridge Pattern Rule 
 - Glue Crawler 
 - Glue Visual ETL 
