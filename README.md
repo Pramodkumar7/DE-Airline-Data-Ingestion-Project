@@ -5,11 +5,11 @@ Data Engineering pipeline designed to ingest data into a data warehouse using AW
 ![Project Architecture](Architecture.png)
 
 ## Tech Stack 
-    - AWS S3
-    - S3 Cloudtrail Notification 
-    - Event Bridge Pattern Rule 
-    - Glue Crawler 
-    - Glue Visual ETL 
-    - AWS SNS 
-    - AWS Redshift 
-    - AWS Step Function
+- AWS S3
+- S3 Cloudtrail Notification 
+- Event Bridge Pattern Rule 
+- Glue Crawler 
+- Glue Visual ETL 
+- AWS SNS 
+- AWS Redshift 
+- AWS Step Function
