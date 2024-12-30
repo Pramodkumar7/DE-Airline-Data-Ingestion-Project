@@ -1,5 +1,4 @@
-# DE-Airline-Data-Ingestion-Project|AWS
-
+# AWS-Airline-Data-Ingestion-Project
 ## Introduction 
 Airline-Data-Ingestion-Project is a data pipeline that collects, processes, and stores airline data in a central data warehouse. It uses AWS cloud services to automate tasks like detecting new files, running data transformations, and storing the results.
 
