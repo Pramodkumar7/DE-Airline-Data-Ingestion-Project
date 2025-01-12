@@ -73,24 +73,75 @@ Business Problems Addressed by the ETL Job
 ---
 
 ## ETL Pipeline 
-1. ### EventBridge Trigger
-    - Daily flight data is uploaded to an S3 bucket in a partitioned manner, where the folder name corresponds to the date. The data is stored in a flights.csv file. An EventBridge rule detects file uploads with the suffix /flights.csv in the S3 bucket and triggers a Step Function State Machine.
-    - ![Event Bridge Rule](Event_bridge_1.png)
-
-  
-2. ###  Stepfunctions StateMachine
+### 1.EventBridge Trigger
+- Daily flight data is uploaded to an S3 bucket in a partitioned manner, where the folder name corresponds to the date. The data is stored in a flights.csv file. An EventBridge rule detects file uploads with the suffix /flights.csv in the S3 bucket and triggers a Step Function State Machine.
+   ![Event Bridge Rule](Event_bridge_1.png)
+### 2.Stepfunctions StateMachine
    - The Step Function State Machine orchestrates the workflow of ETL pipeline,ensuring each step in the pipeline is executed in the correct order with error handling and notifications.
 
-   - ![Stepfunction Statemachine Workflow](Stepfunction_Statemachine.png)
-3. ### Glue ETL job 
-       - 3.1 Running Glue Crawler to detect the data in the new partition and read the file from S3.
-   - *Glue crawler to detect new partitions in S3 bucket*
-     - ![Glue_crawler_to detect new partitions in S3 bucket](Glue_crawle_S3_daily_data.png)
-   - _Code_to_read_S3_data_from_glue_catalog_
-     - ![Code_to_read_S3_data_from_glue_catalog ](Code_to_read_S3_data_from_glue_catalog.png)
-       - 3.2 Read the airports_dim table data stored in Redshift and transform and enriching the daily flights data in the incoming csv file.
- -   _Code_to_read_dimension_table_data_from_redshift_
-  - ![Code_to_Read_dimension_table_data_from_redshift.png ](Read_dimension_table_data_from_redshift.png)
+  ![Stepfunction Statemachine Workflow](Stepfunction_Statemachine.png)
+     
+### 3.Glue ETL job 
 
-       
-       - Storing the cleaned and enriched data in a daily_flights_fact Redshift table.
+#### 3.1 Running Glue Crawler to Detect Data
+- *Glue crawler to detect new partitions in S3 bucket*
+  
+  ![Glue crawler to detect new partitions in S3 bucket](Glue_crawle_S3_daily_data.png)
+
+- _Code to read S3 data from Glue catalog_
+
+ ```python
+  Daily_raw_data_read_S3_node1733823614922 = glueContext.create_dynamic_frame.from_catalog(database="airline", table_name="airlines_daily_raw_data", transformation_ctx="Daily_raw_data_read_S3_node1733823614922")
+
+  ```
+#### 3.2 Reading data from Redshift
+- _Code to read dimension table data from Redshift_
+
+ ```python
+  Dimension_table_read_node1733824945709 = glueContext.create_dynamic_frame.from_options(
+    connection_type="redshift",
+    connection_options={
+        "url": "jdbc:redshift://redshift-cluster--------.us-east-1.redshift.amazonaws.com:5439/dev",
+        "user": "awsuser",
+        "password": "********",
+        "dbtable": "airlines.airports_dim",
+        "redshiftTmpDir": "s3://redshift-jobs-staging-directory/"
+    },
+    transformation_ctx="Dimension_table_read_node1733824945709"
+)
+
+  ```
+
+#### 3.3 Joining and Transforming the daily flight data read from S3
+- _Code for joining data from S3, redshift and schema change_
+``` python
+
+Join_node1733825055250 = Join.apply(frame1=Daily_raw_data_read_S3_node1733823614922, frame2=Dimension_table_read_node1733824945709, keys1=["originairportid"], keys2=["airport_id"], transformation_ctx="Join_node1733825055250")
+
+ChangeSchema_node1733825211532 = ApplyMapping.apply(frame=Join_node1733825055250, mappings=[("carrier", "string", "carrier", "string"), ("destairportid", "long", "destairportid", "long"), ("depdelay", "long", "depdelay", "bigint"), ("arrdelay", "long", "arrdelay", "bigint"), ("city", "string", "city", "string"), ("name", "string", "name", "string"), ("state", "string", "state", "string")], transformation_ctx="ChangeSchema_node1733825211532")
+
+Join_node1733825341140 = Join.apply(frame1=ChangeSchema_node1733825211532, frame2=Dimension_table_read_node1733824945709, keys1=["destairportid"], keys2=["airport_id"], transformation_ctx="Join_node1733825341140")
+
+ChangeSchema_node1733825415703 = ApplyMapping.apply(frame=Join_node1733825341140, mappings=[("carrier", "string", "carrier", "string"), ("state", "string", "dep_state", "string"), ("`.state`", "string", "arr_state", "string"), ("`.city`", "string", "arr_city", "string"), ("city", "string", "dep_city", "string")], transformation_ctx="ChangeSchema_node1733825415703")
+```
+#### 3.3 Storing Data in Redshift
+- Storing the output data in the `daily_flights_fact` table in Redshift.
+``` python Redshift_Fact_table_updation_node1733825570739 = glueContext.write_dynamic_frame.from_options(
+    frame=ChangeSchema_node1733825415703, 
+    connection_type="redshift",
+    connection_options={
+      "url": "jdbc:redshift://redshift-cluster--------.us-east-1.redshift.amazonaws.com:5439/dev",
+        "user": "awsuser",
+        "password": "********",
+        "dbtable": "airlines.daily_flights_fact", 
+        "redshiftTmpDir": "s3://redshift-jobs-staging-directory"
+    },
+    transformation_ctx="Redshift_Fact_table_updation_node1733825570739"
+)
+
+
+job.commit() 
+```
+- Glue Job bookmark is enabled to perform ETL only for the incremental data arriving in S3 bucket. 
+  
+  ![Glue_Job_bookmark](Glue_Job_bookmark.png)
