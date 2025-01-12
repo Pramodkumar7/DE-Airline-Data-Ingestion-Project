@@ -10,7 +10,7 @@ This project ensures that data is handled efficiently and is ready for analysis,
 
 ## [3. Tech Stack](#tech-stack) 
 - AWS S3
-- Cloudtrail Notification 
+- Cloudtrail  
 - Event Bridge Pattern Rule 
 - Glue Crawler 
 - Glue Visual ETL 
