@@ -84,11 +84,13 @@ Business Problems Addressed by the ETL Job
    - ![Stepfunction Statemachine Workflow](Stepfunction_Statemachine.png)
 3. ### Glue ETL job 
        - 3.1 Running Glue Crawler to detect the data in the new partition and read the file from S3.
+   - *Glue crawler to detect new partitions in S3 bucket*
      - ![Glue_crawler_to detect new partitions in S3 bucket](Glue_crawle_S3_daily_data.png)
-     - 
+   - _Code_to_read_S3_data_from_glue_catalog_
      - ![Code_to_read_S3_data_from_glue_catalog ](Code_to_read_S3_data_from_glue_catalog.png)
-   
+       - 3.2 Read the airports_dim table data stored in Redshift and transform and enriching the daily flights data in the incoming csv file.
+ -   _Code_to_read_dimension_table_data_from_redshift_
+  - ![Code_to_Read_dimension_table_data_from_redshift.png ](Read_dimension_table_data_from_redshift.png)
 
-  
-       - Extract the airports_dim table data stored in Redshift and transforming and enriching the daily flights data in the incoming csv file.
+       
        - Storing the cleaned and enriched data in a daily_flights_fact Redshift table.
