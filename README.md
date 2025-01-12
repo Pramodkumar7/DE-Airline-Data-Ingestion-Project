@@ -6,7 +6,7 @@ This project ensures that data is handled efficiently and is ready for analysis,
 
 
 ## Architecture 
-![Project Architecture](Architecture .png)
+![Project Architecture](Architecture.png)
 
 ## Tech Stack 
 - AWS S3
