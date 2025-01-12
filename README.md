@@ -72,18 +72,18 @@ Business Problems Addressed by the ETL Job
 
 ---
 
-## ETL Pipeline 
-### 1.EventBridge Trigger
+## [5. ETL Pipeline](#etl-pipeline)
+### [5.1 EventBridge Trigger](#eventbridge-trigger)
 - Daily flight data is uploaded to an S3 bucket in a partitioned manner, where the folder name corresponds to the date. The data is stored in a flights.csv file. An EventBridge rule detects file uploads with the suffix /flights.csv in the S3 bucket and triggers a Step Function State Machine.
    ![Event Bridge Rule](Event_bridge_1.png)
-### 2.Stepfunctions StateMachine
+### [5.2 StepFunctions StateMachine](#stepfunctions-statemachine)
    - The Step Function State Machine orchestrates the workflow of ETL pipeline,ensuring each step in the pipeline is executed in the correct order with error handling and notifications.
 
   ![Stepfunction Statemachine Workflow](Stepfunction_Statemachine.png)
      
-### 3.Glue ETL job 
+### [5.3 Glue ETL Job](#glue-etl-job)
 
-#### 3.1 Running Glue Crawler to Detect Data
+#### [5.3.1 Running Glue Crawler to Detect Data](#glue-crawler)
 - *Glue crawler to detect new partitions in S3 bucket*
   
   ![Glue crawler to detect new partitions in S3 bucket](Glue_crawle_S3_daily_data.png)
