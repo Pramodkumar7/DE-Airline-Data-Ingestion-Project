@@ -1,14 +1,13 @@
 # Airline Data Ingestion Project | AWS 
-## Introduction 
+## [1. Introduction](#introduction)
 Airline-Data-Ingestion-Project is a data pipeline that collects, processes, and stores airline data in a central data warehouse. Data uploaded in S3 buckets is read, and an ETL job is performed before finally being stored into a Redshift table. It uses AWS cloud services to automate tasks, such as detecting new files, running data transformations, and storing the results. 
 
 This project ensures that data is handled efficiently and is ready for analysis, making it easy to generate insights and reports. It’s designed to be reliable, scalable, and simple to use. 
 
-
-## Architecture 
+## [2. Architecture](#architecture)
 ![Project Architecture](Architecture.png)
 
-## Tech Stack 
+## [3. Tech Stack](#tech-stack) 
 - AWS S3
 - Cloudtrail Notification 
 - Event Bridge Pattern Rule 
@@ -18,7 +17,7 @@ This project ensures that data is handled efficiently and is ready for analysis,
 - AWS Redshift 
 - AWS Step Function
 
-## Dataset Description
+## [4. Dataset Description](#dataset-description)
 
 The dataset contains daily flight information for airlines in the United States. It tracks details such as delays, departure and arrival locations, and carrier information. The data is sourced from daily CSV uploads to an Amazon S3 bucket and ingested into Redshift through an ETL pipeline.
 
@@ -26,7 +25,7 @@ Business Problems Addressed by the ETL Job
 - Delay Analysis: Enables identifying problematic routes and airports by analyzing flight delays across locations, helping airlines improve efficiency.
 - Carrier Performance: Provides insights into carrier delays on specific routes, aiding decisions on resource allocation and policy adjustments.
 
-### Table Details
+### [4.1 Table Details](#table-details)
 
 1. #### Fact Table: `daily_flights_fact`
 - Purpose:
