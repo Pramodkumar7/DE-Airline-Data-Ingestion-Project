@@ -1,6 +1,6 @@
 # Airline Data Ingestion Project | AWS 
 ## Introduction 
-Airline-Data-Ingestion-Project is a data pipeline that collects, processes, and stores airline data in a central data warehouse. It uses AWS cloud services to automate tasks like detecting new files, running data transformations, and storing the results.
+Airline-Data-Ingestion-Project is a data pipeline that collects, processes, and stores airline data in a central data warehouse. Data uploaded in S3 buckets is read, and an ETL job is performed before finally being stored into a Redshift table. It uses AWS cloud services to automate tasks, such as detecting new files, running data transformations, and storing the results.
 
 This project ensures that data is handled efficiently and is ready for analysis, making it easy to generate insights and reports. It’s designed to be reliable, scalable, and simple to use.
 
@@ -63,6 +63,7 @@ Business Problems Addressed by the ETL Job
 ---
 
 3. #### Sample CSV Data (`flights.csv`)
+   - CSV data uploaded daily in the S3 bucket.
 
 | Carrier | Origin Airport ID | Dest Airport ID | Dep Delay (mins) | Arr Delay (mins) |
 |---------|--------------------|------------------|------------------|------------------|
