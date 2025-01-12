@@ -17,3 +17,60 @@ This project ensures that data is handled efficiently and is ready for analysis,
 - AWS SNS 
 - AWS Redshift 
 - AWS Step Function
+
+## Dataset Description
+
+The dataset contains daily flight information for airlines in the United States. It tracks details such as delays, departure and arrival locations, and carrier information. The data is sourced from daily CSV uploads to an Amazon S3 bucket and ingested into Redshift through an ETL pipeline.
+
+Business Problems Addressed by the ETL Job
+- Delay Analysis: Enables identifying problematic routes and airports by analyzing flight delays across locations, helping airlines improve efficiency.
+- Carrier Performance: Provides insights into carrier delays on specific routes, aiding decisions on resource allocation and policy adjustments.
+
+### Table Details
+
+1. #### Fact Table: `daily_flights_fact`
+- Purpose:
+  Stores enriched flight data, combining flight metrics with details from the dimension tables for analysis.
+
+- Schema:
+
+| Column Name    | Data Type      | Description                                         |
+|----------------|----------------|-----------------------------------------------------|
+| `carrier`      | VARCHAR(10)    | Airline identifier . |
+| `dep_airport`  | VARCHAR(200)   | Departure airport name.                            |
+| `arr_airport`  | VARCHAR(200)   | Arrival airport name.                              |
+| `dep_city`     | VARCHAR(100)   | City of the departure airport.                     |
+| `arr_city`     | VARCHAR(100)   | City of the arrival airport.                       |
+| `dep_state`    | VARCHAR(100)   | State of the departure airport.                    |
+| `arr_state`    | VARCHAR(100)   | State of the arrival airport.                      |
+| `dep_delay`    | BIGINT         | Departure delay in minutes.                        |
+| `arr_delay`    | BIGINT         | Arrival delay in minutes.                          |
+
+---
+
+2. #### Dimension Table: `airports_dim`
+- Purpose: Provides descriptive details about airports for enrichment.
+
+- Schema: 
+
+| Column Name    | Data Type      | Description                                         |
+|----------------|----------------|-----------------------------------------------------|
+| `airport_id`   | VARCHAR(50)    | Unique identifier for the airport.                 |
+| `city`         | VARCHAR(100)   | City where the airport is located.                 |
+| `state`        | VARCHAR(100)   | State where the airport is located.                |
+| `name`         | VARCHAR(200)   | Full name of the airport.                          |
+
+---
+
+3. #### Sample CSV Data (`flights.csv`)
+
+| Carrier | Origin Airport ID | Dest Airport ID | Dep Delay (mins) | Arr Delay (mins) |
+|---------|--------------------|------------------|------------------|------------------|
+| AA      | ORD                | LAX              | 15               | 10               |
+| DL      | JFK                | ATL              | -5               | -3               |
+| UA      | DEN                | SFO              | 20               | 25               |
+
+---
+
+## ETL Pipeline 
+1. EventBridge Trigger
