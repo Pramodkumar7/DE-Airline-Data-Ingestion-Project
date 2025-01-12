@@ -1,4 +1,26 @@
 # Airline Data Ingestion Project | AWS 
+
+## Index
+
+1. [Introduction](#introduction)
+2. [Architecture](#architecture)
+3. [Tech Stack](#tech-stack)
+4. [Dataset Description](#dataset-description)
+   - [4.1 Table Details](#table-details)
+     - [Fact Table: `daily_flights_fact`](#fact-table-daily_flights_fact)
+     - [Dimension Table: `airports_dim`](#dimension-table-airports_dim)
+     - [Sample CSV Data (`flights.csv`)](#sample-csv-data-flightscsv)
+5. [ETL Pipeline](#etl-pipeline)
+   - [5.1 EventBridge Trigger](#eventbridge-trigger)
+   - [5.2 StepFunctions StateMachine](#stepfunctions-statemachine)
+   - [5.3 Glue ETL Job](#glue-etl-job)
+     - [5.3.1 Running Glue Crawler to Detect Data](#glue-crawler)
+     - [5.3.2 Reading data from Redshift](#Reading-data-from-Redshift)
+     - [5.3.3 Joining and Transforming the daily flight data read from S3](#Joins-and-Transformations)
+     - [5.3.4 Data upload to redshift](#Data-upload-to-Redshift])
+   - [5.4 Job Notification SNS](#Job-Notification-SNS]) 
+
+
 ## [1. Introduction](#introduction)
 Airline-Data-Ingestion-Project is a data pipeline that collects, processes, and stores airline data in a central data warehouse. Data uploaded in S3 buckets is read, and an ETL job is performed before finally being stored into a Redshift table. It uses AWS cloud services to automate tasks, such as detecting new files, running data transformations, and storing the results. 
 
@@ -149,7 +171,7 @@ job.commit()
   
   ![Glue_Job_bookmark](Glue_Job_bookmark.png)
 
-#### [5.3.6 Job Notification](#Job-Notification]) 
+### [5.4 Job Notification SNS](#Job-Notification-SNS]) 
 - ETL job status is sent to email with the help of SNS topic.
 ![Glue Job status](Glue_Job_status.png)
   
