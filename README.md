@@ -2,7 +2,7 @@
 ## Introduction 
 Airline-Data-Ingestion-Project is a data pipeline that collects, processes, and stores airline data in a central data warehouse. Data uploaded in S3 buckets is read, and an ETL job is performed before finally being stored into a Redshift table. It uses AWS cloud services to automate tasks, such as detecting new files, running data transformations, and storing the results. 
 
-This project ensures that data is handled efficiently and is ready for analysis, making it easy to generate insights and reports. It’s designed to be reliable, scalable, and simple to use.
+This project ensures that data is handled efficiently and is ready for analysis, making it easy to generate insights and reports. It’s designed to be reliable, scalable, and simple to use. 
 
 
 ## Architecture 
