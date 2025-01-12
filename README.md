@@ -94,7 +94,8 @@ Business Problems Addressed by the ETL Job
   Daily_raw_data_read_S3_node1733823614922 = glueContext.create_dynamic_frame.from_catalog(database="airline", table_name="airlines_daily_raw_data", transformation_ctx="Daily_raw_data_read_S3_node1733823614922")
 
   ```
-#### 3.2 Reading data from Redshift
+
+#### [5.3.2 Reading data from Redshift](#Reading-data-from-Redshift)
 - _Code to read dimension table data from Redshift_
 
  ```python
@@ -112,7 +113,7 @@ Business Problems Addressed by the ETL Job
 
   ```
 
-#### 3.3 Joining and Transforming the daily flight data read from S3
+#### [5.3.3 Joining and Transforming the daily flight data read from S3](#Joins-and-Transformations)
 - _Code for joining data from S3, redshift and schema change_
 ``` python
 
@@ -124,7 +125,8 @@ Join_node1733825341140 = Join.apply(frame1=ChangeSchema_node1733825211532, frame
 
 ChangeSchema_node1733825415703 = ApplyMapping.apply(frame=Join_node1733825341140, mappings=[("carrier", "string", "carrier", "string"), ("state", "string", "dep_state", "string"), ("`.state`", "string", "arr_state", "string"), ("`.city`", "string", "arr_city", "string"), ("city", "string", "dep_city", "string")], transformation_ctx="ChangeSchema_node1733825415703")
 ```
-#### 3.3 Storing Data in Redshift
+
+#### [5.3.4 Data upload to redshift](#Data-upload-to-Redshift])
 - Storing the output data in the `daily_flights_fact` table in Redshift.
 ``` python Redshift_Fact_table_updation_node1733825570739 = glueContext.write_dynamic_frame.from_options(
     frame=ChangeSchema_node1733825415703, 
@@ -142,6 +144,13 @@ ChangeSchema_node1733825415703 = ApplyMapping.apply(frame=Join_node1733825341140
 
 job.commit() 
 ```
+#### [5.3.5 Job Bookmark](#Job-Bookmark])
 - Glue Job bookmark is enabled to perform ETL only for the incremental data arriving in S3 bucket. 
   
   ![Glue_Job_bookmark](Glue_Job_bookmark.png)
+
+#### [5.3.6 Job Notification](#Job-Notification]) 
+- ETL job status is sent to email with the help of SNS topic.
+- ![Glue Job status](Glue_Job_status.png)
+  
+- ![SNS_email_notification](SNS_email_notification.png)
