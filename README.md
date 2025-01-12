@@ -151,6 +151,6 @@ job.commit()
 
 #### [5.3.6 Job Notification](#Job-Notification]) 
 - ETL job status is sent to email with the help of SNS topic.
-- ![Glue Job status](Glue_Job_status.png)
+![Glue Job status](Glue_Job_status.png)
   
-- ![SNS_email_notification](SNS_email_notification.png)
+![SNS_email_notification](SNS_email_notification.png)
